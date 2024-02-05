@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+  workflow_dispatch:
 
 jobs:
   create-pr:
@@ -21,4 +22,10 @@ jobs:
       - name: Create Pull Request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr create --base int --head dev --title "Merge Dev into Int" --body "Merge changes from Dev into Int."
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] || [ "${{ github.event_name }}" == "push" ]; then
+            gh pr create --base int --head dev --title "Merge Dev into Int" --body "Merge changes from Dev into Int."
+          else
+            echo "This workflow can only be triggered manually or on push to the dev branch."
+            exit 1
+          fi
