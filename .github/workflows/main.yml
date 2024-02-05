@@ -1,0 +1,27 @@
+name: Create PR from Dev to Int
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up GitHub CLI
+        uses: actions/setup-gh@v0
+        with:
+          gh-version: 1.11.0
+
+      - name: Create Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # run: |
+        #   gh pr create --base int --head dev --title "Merge Dev into Int" --body "Merge changes from Dev into Int."
+          run: |
+            gh pr create --base int --head dev --title "Merge Dev into Int" --body "Merge changes from Dev into Int."
